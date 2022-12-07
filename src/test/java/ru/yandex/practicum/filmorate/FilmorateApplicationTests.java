@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.util.FileToJsonString;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -31,7 +32,7 @@ class FilmorateApplicationTests {
     private UserController userController;
     @Autowired
     private FilmController filmController;
-    private final String resPath = "src\\test\\resources\\";
+    private final String resPath = "src" + File.separator + "test" + File.separator + "resources" + File.separator;
 
 
     @Test
