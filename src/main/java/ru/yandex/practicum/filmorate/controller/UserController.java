@@ -17,16 +17,17 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
     protected final Map<Integer, User> users = new HashMap<>();
+    private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
 
     @GetMapping
     public List<User> getUsers(HttpServletRequest request) {
-        log.info("Получен запрос к эндпоинту: '{} {}'", request.getMethod(), request.getRequestURI());
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
         return new ArrayList<>(users.values());
     }
 
     @PostMapping
     public User createUser(@RequestBody User user, HttpServletRequest request) {
-        log.info("Получен запрос к эндпоинту: '{} {}'", request.getMethod(), request.getRequestURI());
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
         Validator.validateUser(user);
         user.setId(IdGenerator.generateUid());
         users.put(user.getId(), user);
@@ -35,7 +36,7 @@ public class UserController {
 
     @PutMapping
     public User putUser(@RequestBody User user, HttpServletRequest request) {
-        log.info("Получен запрос к эндпоинту: '{} {}'", request.getMethod(), request.getRequestURI());
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
         if (!users.containsKey(user.getId())) throw new RuntimeException("User does not exist");
         Validator.validateUser(user);
         users.put(user.getId(), user);
