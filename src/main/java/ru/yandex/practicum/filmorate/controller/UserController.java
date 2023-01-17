@@ -15,6 +15,8 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
+    private final String friendsEndpoint = "/{id}/friends";
+
 
     @Autowired
     public UserController(UserService userService) {
@@ -34,14 +36,14 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @GetMapping("/{id}/friends")
+    @GetMapping(friendsEndpoint)
     public List<User> getFriends(@PathVariable Integer id,
                                  HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
         return userService.getFriends(id);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
+    @GetMapping(friendsEndpoint + "/common/{otherId}")
     public List<User> commonFriends(@PathVariable Integer id,
                                     @PathVariable Integer otherId,
                                     HttpServletRequest request) {
@@ -63,7 +65,7 @@ public class UserController {
         return userService.putUser(user);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping(friendsEndpoint + "/{friendId}")
     public boolean addFriend(@PathVariable Integer id,
                              @PathVariable Integer friendId,
                              HttpServletRequest request) {
@@ -71,7 +73,7 @@ public class UserController {
         return userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping(friendsEndpoint + "/{friendId}")
     public boolean removeFriend(@PathVariable Integer id,
                                 @PathVariable Integer friendId,
                                 HttpServletRequest request) {

@@ -19,6 +19,7 @@ public class FilmController {
     private final FilmService filmService;
     private final Map<Integer, Film> films = new HashMap<>();
     private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
+    private final String likeEndpoint = "/{id}/like/{userId}";
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -60,7 +61,7 @@ public class FilmController {
         return filmService.putFilm(film);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping(likeEndpoint)
     public boolean addLike(@PathVariable Integer id,
                            @PathVariable Integer userId,
                            HttpServletRequest request) {
@@ -68,7 +69,7 @@ public class FilmController {
         return filmService.addLike(id, userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping(likeEndpoint)
     public boolean removeLike(@PathVariable Integer id,
                               @PathVariable Integer userId,
                               HttpServletRequest request) {
