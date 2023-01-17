@@ -36,14 +36,14 @@ public class FilmValidationTests {
     void emptyFilmName() {
         film.setName("");
         validateThrows(film);
-        assertEquals("Wrong film name format", ex.getReason());
+        assertEquals("Film name is empty or blank", ex.getMessage());
     }
 
     @Test
     void blankFilmName() {
         film.setName(" ");
         validateThrows(film);
-        assertEquals("Wrong film name format", ex.getReason());
+        assertEquals("Film name is empty or blank", ex.getMessage());
     }
 
     @Test
@@ -51,21 +51,21 @@ public class FilmValidationTests {
         String string = "a".repeat(201);
         film.setDescription(string);
         validateThrows(film);
-        assertEquals("Description should be shorter than 200 characters", ex.getReason());
+        assertEquals("Description should be shorter than 200 characters", ex.getMessage());
     }
 
     @Test
     void wrongFilmReleaseDate() {
         film.setReleaseDate(LocalDate.of(1895, 12, 27));
         validateThrows(film);
-        assertEquals("Wrong release date", ex.getReason());
+        assertEquals("Wrong release date", ex.getMessage());
     }
 
     @Test
     void negativeFilmDuration() {
         film.setDuration(-100);
         validateThrows(film);
-        assertEquals("Duration should be a positive integer", ex.getReason());
+        assertEquals("Duration should be a positive integer", ex.getMessage());
     }
 
     void validateThrows(Film film) {

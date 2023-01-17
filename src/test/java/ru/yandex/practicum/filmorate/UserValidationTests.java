@@ -36,35 +36,35 @@ public class UserValidationTests {
     void emptyUserEmail() {
         user.setEmail("");
         validateThrows(user);
-        assertEquals("Wrong e-mail format", ex.getReason());
+        assertEquals("Wrong e-mail format", ex.getMessage());
     }
 
     @Test
     void wrongUserEmail() {
         user.setEmail("mail.mail.ru");
         validateThrows(user);
-        assertEquals("Wrong e-mail format", ex.getReason());
+        assertEquals("Wrong e-mail format", ex.getMessage());
     }
 
     @Test
     void emptyUserLogin() {
         user.setLogin("");
         validateThrows(user);
-        assertEquals("Login is empty or contains spaces", ex.getReason());
+        assertEquals("Login is empty or contains spaces", ex.getMessage());
     }
 
     @Test
     void userLoginContainsSpaces() {
         user.setLogin("dolore ullamco");
         validateThrows(user);
-        assertEquals("Login is empty or contains spaces", ex.getReason());
+        assertEquals("Login is empty or contains spaces", ex.getMessage());
     }
 
     @Test
     void userBirthdayInFuture() {
         user.setBirthday(LocalDate.of(2025, 1, 1));
         validateThrows(user);
-        assertEquals("Birthday is after then Now", ex.getReason());
+        assertEquals("Birthday is after then Now", ex.getMessage());
     }
 
     @Test
