@@ -1,45 +1,81 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
-import ru.yandex.practicum.filmorate.util.Validator;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    protected final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
     private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> getUsers(HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return new ArrayList<>(users.values());
+        return userService.getUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Integer id,
+                        HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return userService.getUser(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable Integer id,
+                                 HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> commonFriends(@PathVariable Integer id,
+                                    @PathVariable Integer otherId,
+                                    HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return userService.commonFriends(id, otherId);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user, HttpServletRequest request) {
+    public User createUser(@RequestBody User user,
+                           HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        Validator.validateUser(user);
-        user.setId(IdGenerator.generateUid());
-        users.put(user.getId(), user);
-        return users.get(user.getId());
+        return userService.postUser(user);
     }
 
     @PutMapping
-    public User putUser(@RequestBody User user, HttpServletRequest request) {
+    public User putUser(@RequestBody User user,
+                        HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        if (!users.containsKey(user.getId())) throw new RuntimeException("User does not exist");
-        Validator.validateUser(user);
-        users.put(user.getId(), user);
-        return users.get(user.getId());
+        return userService.putUser(user);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public boolean addFriend(@PathVariable Integer id,
+                             @PathVariable Integer friendId,
+                             HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public boolean removeFriend(@PathVariable Integer id,
+                                @PathVariable Integer friendId,
+                                HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return userService.removeFriend(id, friendId);
     }
 }

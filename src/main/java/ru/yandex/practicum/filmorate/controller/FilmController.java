@@ -1,13 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
-import ru.yandex.practicum.filmorate.util.Validator;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,30 +16,63 @@ import java.util.Map;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
+    private final FilmService filmService;
     private final Map<Integer, Film> films = new HashMap<>();
     private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping
     public List<Film> getFilms(HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return new ArrayList<>(films.values());
+        return filmService.getFilms();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable("id") Integer id,
+                        HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return filmService.getFilm(id);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> popular(@RequestParam(defaultValue = "10", required = false) Integer count,
+                              HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        if (count <= 0) throw new IncorrectParameterException("param count is negative or 0");
+        return filmService.popular(count);
     }
 
     @PostMapping
-    public Film postFilm(@RequestBody Film film, HttpServletRequest request) {
+    public Film postFilm(@RequestBody Film film,
+                         HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        Validator.validateFilm(film);
-        film.setId(IdGenerator.generateFilmId());
-        films.put(film.getId(), film);
-        return films.get(film.getId());
+        return filmService.postFilm(film);
     }
 
     @PutMapping
-    public Film putFilm(@RequestBody Film film, HttpServletRequest request) {
+    public Film putFilm(@RequestBody Film film,
+                        HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        if (!films.containsKey(film.getId())) throw new RuntimeException();
-        Validator.validateFilm(film);
-        films.put(film.getId(), film);
-        return films.get(film.getId());
+        return filmService.putFilm(film);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public boolean addLike(@PathVariable Integer id,
+                           @PathVariable Integer userId,
+                           HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public boolean removeLike(@PathVariable Integer id,
+                              @PathVariable Integer userId,
+                              HttpServletRequest request) {
+        log.info(gotReq, request.getMethod(), request.getRequestURI());
+        return filmService.removeLike(id, userId);
     }
 }
