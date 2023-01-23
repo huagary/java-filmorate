@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.util.IdGenerator;
 import ru.yandex.practicum.filmorate.util.Validator;
@@ -36,35 +36,35 @@ public class UserValidationTests {
     void emptyUserEmail() {
         user.setEmail("");
         validateThrows(user);
-        assertEquals("Wrong e-mail format", ex.getReason());
+        assertEquals("Wrong e-mail format", ex.getMessage());
     }
 
     @Test
     void wrongUserEmail() {
         user.setEmail("mail.mail.ru");
         validateThrows(user);
-        assertEquals("Wrong e-mail format", ex.getReason());
+        assertEquals("Wrong e-mail format", ex.getMessage());
     }
 
     @Test
     void emptyUserLogin() {
         user.setLogin("");
         validateThrows(user);
-        assertEquals("Login is empty or contains spaces", ex.getReason());
+        assertEquals("Login is empty or contains spaces", ex.getMessage());
     }
 
     @Test
     void userLoginContainsSpaces() {
         user.setLogin("dolore ullamco");
         validateThrows(user);
-        assertEquals("Login is empty or contains spaces", ex.getReason());
+        assertEquals("Login is empty or contains spaces", ex.getMessage());
     }
 
     @Test
     void userBirthdayInFuture() {
         user.setBirthday(LocalDate.of(2025, 1, 1));
         validateThrows(user);
-        assertEquals("Birthday is after then Now", ex.getReason());
+        assertEquals("Birthday is after then Now", ex.getMessage());
     }
 
     @Test

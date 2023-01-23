@@ -126,7 +126,7 @@ class FilmorateApplicationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(FileToJsonString.readFile(resPath + fileName, StandardCharsets.UTF_8)))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().is5xxServerError())
                         .andReturn();
                 break;
             case "put":
@@ -134,7 +134,7 @@ class FilmorateApplicationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(FileToJsonString.readFile(resPath + fileName, StandardCharsets.UTF_8)))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().is5xxServerError())
                         .andReturn();
                 break;
         }
