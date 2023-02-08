@@ -1,11 +1,10 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.util.GeneratorID;
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.time.LocalDate;
@@ -16,20 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class FilmValidationTests {
     Film film;
     ValidationException ex;
+    GeneratorID generatorID;
 
     @BeforeEach
     void beforeEach() {
         film = new Film();
-        film.setId(IdGenerator.generateFilmId());
+        generatorID = new GeneratorID();
+        film.setId(generatorID.generateId());
         film.setName("nisi eiusmod");
         film.setDescription("description");
         film.setReleaseDate(LocalDate.of(1950, 1, 1));
         film.setDuration(100);
-    }
-
-    @AfterEach
-    void afterEach() {
-        IdGenerator.resetIds();
     }
 
     @Test
