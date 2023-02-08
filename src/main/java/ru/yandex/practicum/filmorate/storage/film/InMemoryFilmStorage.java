@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.util.GeneratorID;
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.util.ArrayList;
@@ -14,6 +14,9 @@ import java.util.Map;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
+    private final GeneratorID generatorID = new GeneratorID();
+
+
 
     @Override
     public Film getFilm(int id) {
@@ -29,7 +32,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film postFilm(Film film) {
         Validator.validateFilm(film);
-        film.setId(IdGenerator.generateFilmId());
+        film.setId(generatorID.generateId());
         films.put(film.getId(), film);
         return films.get(film.getId());
     }

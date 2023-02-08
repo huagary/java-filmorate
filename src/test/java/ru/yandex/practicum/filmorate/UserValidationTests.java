@@ -5,7 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.util.GeneratorID;
+
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.time.LocalDate;
@@ -16,20 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class UserValidationTests {
     User user;
     ValidationException ex;
+    GeneratorID generatorID;
 
     @BeforeEach
     void beforeEach() {
         user = new User();
-        user.setId(IdGenerator.generateUid());
+        generatorID = new GeneratorID();
+        user.setId(generatorID.generateId());
         user.setEmail("mail@mail.ru");
         user.setLogin("dolore");
         user.setName("Nick Name");
         user.setBirthday(LocalDate.of(2000, 1, 1));
-    }
-
-    @AfterEach
-    void afterEach() {
-        IdGenerator.resetIds();
     }
 
     @Test

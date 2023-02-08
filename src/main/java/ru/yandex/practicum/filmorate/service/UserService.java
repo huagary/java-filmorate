@@ -34,8 +34,8 @@ public class UserService {
     }
 
     public boolean addFriend(int userId, int friendId) {
-        if (userStorage.getUser(userId) == null || userStorage.getUser(friendId) == null)
-            throw new NotExistException("User does not exist");
+        if (userStorage.getUser(userId) == null) throw new NotExistException("User id not found");
+        if (userStorage.getUser(friendId) == null) throw new NotExistException("Friend id not found");
         if (userStorage.getUser(userId).getFriends().add(friendId)) {
             userStorage.getUser(friendId).getFriends().add(userId);
             return true;
@@ -51,7 +51,13 @@ public class UserService {
     }
 
     public boolean removeFriend(int userId, int friendId) {
-        return userStorage.getUser(userId).getFriends().remove(friendId);
+        if (userStorage.getUser(userId) == null) throw new NotExistException("User id not found");
+        if (userStorage.getUser(friendId) == null) throw new NotExistException("Friend id not found");
+        if (userStorage.getUser(userId).getFriends().remove(friendId)) {
+            userStorage.getUser(friendId).getFriends().remove(userId);
+            return true;
+        }
+        return false;
     }
 
     public List<User> commonFriends(int userId, int otherId) {

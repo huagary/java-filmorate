@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -17,4 +19,5 @@ public class User {
     String name;
     LocalDate birthday;
     Set<Integer> friends = new HashSet<>();
+    Set<Integer> unconfirmedFriends = new HashSet<>();
 }

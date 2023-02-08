@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.storage.user;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotExistException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.util.GeneratorID;
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.Map;
 @Component
 public class InMemoryUserStorage implements UserStorage {
     protected final Map<Integer, User> users = new HashMap<>();
+    private final GeneratorID generatorID = new GeneratorID();
 
     @Override
     public User getUser(int id) {
@@ -29,7 +30,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User postUser(User user) {
         Validator.validateUser(user);
-        user.setId(IdGenerator.generateUid());
+        user.setId(generatorID.generateId());
         users.put(user.getId(), user);
         return users.get(user.getId());
     }
