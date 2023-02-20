@@ -28,7 +28,7 @@ public class FilmDbStorageTests {
     Film film;
 
     @Test
-    public void getFilmById() {
+    public void getFilm() {
         film = filmDbStorage.getFilm(1);
         System.out.println(film);
         assertThat(film)
