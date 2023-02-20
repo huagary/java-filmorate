@@ -1,15 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
     int id;
@@ -17,7 +16,7 @@ public class Film {
     String description;
     LocalDate releaseDate;
     int duration;
-    Set<Integer> likes;
-    Set<Genre> genres;
-    Mpa mpa;
+    Set<Integer> likes = new HashSet<>();
+    Set<String> genres = new HashSet<>();
+    Rating rating;
 }

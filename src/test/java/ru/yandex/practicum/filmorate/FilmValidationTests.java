@@ -19,14 +19,13 @@ public class FilmValidationTests {
 
     @BeforeEach
     void beforeEach() {
+        film = new Film();
         generatorID = new GeneratorID();
-        film = Film.builder()
-                .id(generatorID.generateId())
-                .name("nisi eiusmod")
-                .description("description")
-                .releaseDate(LocalDate.of(1950, 1, 1))
-                .duration(100)
-                .build();
+        film.setId(generatorID.generateId());
+        film.setName("nisi eiusmod");
+        film.setDescription("description");
+        film.setReleaseDate(LocalDate.of(1950, 1, 1));
+        film.setDuration(100);
     }
 
     @Test
