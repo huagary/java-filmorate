@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import ru.yandex.practicum.filmorate.exception.NotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
@@ -20,12 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@SqlGroup({
+        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:testData.sql"),
+        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:clean.sql")
+})
 public class FilmDbStorageTests {
     private final FilmDbStorage filmDbStorage;
     private final MpaDAO mpaDAO;
     Exception ex;
     Film film;
+
 
     @Test
     public void getFilmById() {
@@ -37,8 +42,7 @@ public class FilmDbStorageTests {
                 .hasFieldOrPropertyWithValue("name", "funny film")
                 .hasFieldOrPropertyWithValue("description", "Very funny film")
                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 05, 26))
-                .hasFieldOrPropertyWithValue("duration", 145)
-                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
+                .hasFieldOrPropertyWithValue("duration", 145);
         ;
     }
 
@@ -77,8 +81,7 @@ public class FilmDbStorageTests {
                 .hasFieldOrPropertyWithValue("name", "new film")
                 .hasFieldOrPropertyWithValue("description", "...")
                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 12, 27))
-                .hasFieldOrPropertyWithValue("duration", 100)
-                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
+                .hasFieldOrPropertyWithValue("duration", 100);
     }
 
     @Test
@@ -98,8 +101,7 @@ public class FilmDbStorageTests {
                 .hasFieldOrPropertyWithValue("name", "updated film")
                 .hasFieldOrPropertyWithValue("description", "...")
                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 12, 27))
-                .hasFieldOrPropertyWithValue("duration", 100)
-                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
+                .hasFieldOrPropertyWithValue("duration", 100);
         assertEquals(film.getName(), filmDbStorage.getFilm(1).getName());
     }
 

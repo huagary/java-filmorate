@@ -1,0 +1,15 @@
+DELETE
+FROM friendship;
+DELETE
+FROM film_likes;
+DELETE
+FROM film_genre;
+DELETE
+FROM film;
+ALTER TABLE film
+    ALTER COLUMN film_id RESTART WITH 1;
+DELETE
+FROM users;
+ALTER TABLE users
+    ALTER COLUMN user_id RESTART WITH 1;
+
