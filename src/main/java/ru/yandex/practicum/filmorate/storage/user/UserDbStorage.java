@@ -23,17 +23,6 @@ public class UserDbStorage implements UserStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public void addFriend(int userId, int friendId) {
-        final String sql = "insert into friendship (user_id, friend_id) values(?,?)";
-        jdbcTemplate.update(sql, userId, friendId);
-    }
-
-    @Override
-    public void removeFriend(int userId, int friendId) {
-        final String sql = "delete from friendship where user_id=? and friend_id=?";
-        jdbcTemplate.update(sql, userId, friendId);
-    }
 
     @Override
     public User getUser(int id) {
@@ -63,9 +52,9 @@ public class UserDbStorage implements UserStorage {
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, newUser.getName());
                     ps.setString(2, newUser.getEmail());
                     ps.setString(3, newUser.getLogin());
-                    ps.setString(1, newUser.getName());
                     ps.setDate(4, Date.valueOf(newUser.getBirthday()));
                     return ps;
                 }, generatedKeyHolder);
@@ -87,6 +76,20 @@ public class UserDbStorage implements UserStorage {
                 updatedUser.getName(),
                 updatedUser.getBirthday());
         return getUser(updatedUser.getId());
+    }
+
+    @Override
+    public void addFriend(int userId, int friendId) {
+        final String sql = "insert into friendship (user_id, friend_id) values(?,?)";
+        if (userId != friendId) {
+            jdbcTemplate.update(sql, userId, friendId);
+        }
+    }
+
+    @Override
+    public void removeFriend(int userId, int friendId) {
+        final String sql = "delete from friendship where user_id=? and friend_id=?";
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     private User makeUser(SqlRowSet rs, int userId) {

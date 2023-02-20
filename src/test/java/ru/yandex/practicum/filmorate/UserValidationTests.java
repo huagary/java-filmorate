@@ -1,12 +1,10 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.util.GeneratorID;
-
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.time.LocalDate;

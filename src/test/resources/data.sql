@@ -1,8 +1,3 @@
-INSERT INTO mpa (name) VALUES ('G'), ('PG'), ('PG-13'), ('R'), ('NC-17');
-
-INSERT INTO genre (name)
-VALUES ('Комедия'), ('Драма'), ('Мультфильм'), ('Триллер'), ('Документальный'), ('Боевик');
-
 INSERT INTO users (email, login, name, birthday)
 VALUES ('tarantino@ya.ru', 'tarantino', 'Quentin Tarantino', '1963-03-27'),
        ('linch@ya.ru', 'lynch', 'David Lynch', '1946-01-20'),

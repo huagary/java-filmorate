@@ -15,8 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -31,9 +30,16 @@ public class FilmDbStorageTests {
     @Test
     public void getFilmById() {
         film = filmDbStorage.getFilm(1);
+        System.out.println(film);
         assertThat(film)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id", 1);
+                .hasFieldOrPropertyWithValue("id", 1)
+                .hasFieldOrPropertyWithValue("name", "funny film")
+                .hasFieldOrPropertyWithValue("description", "Very funny film")
+                .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 05, 26))
+                .hasFieldOrPropertyWithValue("duration", 145)
+                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
+        ;
     }
 
     @Test
@@ -49,6 +55,10 @@ public class FilmDbStorageTests {
     public void getFilms() {
         List<Film> films = filmDbStorage.getFilms();
         assertEquals(4, films.size());
+        assertEquals(1, films.get(0).getId());
+        assertEquals(2, films.get(1).getId());
+        assertEquals(3, films.get(2).getId());
+        assertEquals(4, films.get(3).getId());
     }
 
     @Test
@@ -61,7 +71,14 @@ public class FilmDbStorageTests {
                 .mpa(mpaDAO.getMpa(1))
                 .build();
         filmDbStorage.postFilm(film);
-        assertEquals(film.getName(), filmDbStorage.getFilm(5).getName());
+        assertThat(filmDbStorage.getFilm(5))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("id", 5)
+                .hasFieldOrPropertyWithValue("name", "new film")
+                .hasFieldOrPropertyWithValue("description", "...")
+                .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 12, 27))
+                .hasFieldOrPropertyWithValue("duration", 100)
+                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
     }
 
     @Test
@@ -75,6 +92,14 @@ public class FilmDbStorageTests {
                 .mpa(mpaDAO.getMpa(1))
                 .build();
         filmDbStorage.putFilm(film);
+        assertThat(filmDbStorage.getFilm(1))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("id", 1)
+                .hasFieldOrPropertyWithValue("name", "updated film")
+                .hasFieldOrPropertyWithValue("description", "...")
+                .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1999, 12, 27))
+                .hasFieldOrPropertyWithValue("duration", 100)
+                .hasFieldOrPropertyWithValue("mpa", mpaDAO.getMpa(1));
         assertEquals(film.getName(), filmDbStorage.getFilm(1).getName());
     }
 
@@ -83,6 +108,7 @@ public class FilmDbStorageTests {
         assertEquals(2, filmDbStorage.getFilm(1).getLikes().size());
         filmDbStorage.addLike(1, 3);
         assertEquals(3, filmDbStorage.getFilm(1).getLikes().size());
+        assertTrue(filmDbStorage.getFilm(1).getLikes().contains(3));
     }
 
     @Test
@@ -95,14 +121,18 @@ public class FilmDbStorageTests {
     @Test
     public void removeLike() {
         assertEquals(2, filmDbStorage.getFilm(1).getLikes().size());
+        assertTrue(filmDbStorage.getFilm(1).getLikes().contains(2));
         filmDbStorage.removeLike(1, 2);
         assertEquals(1, filmDbStorage.getFilm(1).getLikes().size());
+        assertFalse(filmDbStorage.getFilm(1).getLikes().contains(2));
     }
 
     @Test
     public void removeNotExistLike() {
         assertEquals(2, filmDbStorage.getFilm(1).getLikes().size());
+        assertFalse(filmDbStorage.getFilm(1).getLikes().contains(-1));
         filmDbStorage.removeLike(1, -1);
         assertEquals(2, filmDbStorage.getFilm(1).getLikes().size());
+        assertFalse(filmDbStorage.getFilm(1).getLikes().contains(-1));
     }
 }
