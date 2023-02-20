@@ -4,5 +4,6 @@
   "releaseDate": "1989-04-17",
   "description": "New film update decription",
   "duration": 190,
-  "rate": 4
+  "rate": 4,
+  "mpa": { "id": 3}
 }
