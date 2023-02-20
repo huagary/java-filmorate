@@ -21,13 +21,14 @@ public class UserValidationTests {
 
     @BeforeEach
     void beforeEach() {
-        user = new User();
         generatorID = new GeneratorID();
-        user.setId(generatorID.generateId());
-        user.setEmail("mail@mail.ru");
-        user.setLogin("dolore");
-        user.setName("Nick Name");
-        user.setBirthday(LocalDate.of(2000, 1, 1));
+        user = User.builder()
+                .id(generatorID.generateId())
+                .email("mail@mail.ru")
+                .login("dolore")
+                .name("Nick Name")
+                .birthday(LocalDate.of(2000, 1, 1))
+                .build();
     }
 
     @Test

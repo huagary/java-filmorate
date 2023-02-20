@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Component("inMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     protected final Map<Integer, User> users = new HashMap<>();
     private final GeneratorID generatorID = new GeneratorID();
@@ -41,5 +41,15 @@ public class InMemoryUserStorage implements UserStorage {
         Validator.validateUser(user);
         users.put(user.getId(), user);
         return users.get(user.getId());
+    }
+
+    @Override
+    public void addFriend(int userId, int friendId) {
+        getUser(userId).getFriends().add(friendId);
+    }
+
+    @Override
+    public void removeFriend(int userId, int friendId) {
+        getUser(userId).getFriends().remove(friendId);
     }
 }
