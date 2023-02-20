@@ -1,5 +1,6 @@
 # java-filmorate
-Template repository for Filmorate project.
+DB diagram:
+
 ![Filmorate database diagram](https://github.com/huagary/java-filmorate/blob/main/images/filmorate_db.jpg)
 
 All users query:
