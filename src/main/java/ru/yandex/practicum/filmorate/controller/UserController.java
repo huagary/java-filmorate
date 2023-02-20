@@ -66,18 +66,18 @@ public class UserController {
     }
 
     @PutMapping(friendsEndpoint + "/{friendId}")
-    public boolean addFriend(@PathVariable Integer id,
-                             @PathVariable Integer friendId,
-                             HttpServletRequest request) {
+    public void addFriend(@PathVariable Integer id,
+                          @PathVariable Integer friendId,
+                          HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return userService.addFriend(id, friendId);
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping(friendsEndpoint + "/{friendId}")
-    public boolean removeFriend(@PathVariable Integer id,
-                                @PathVariable Integer friendId,
-                                HttpServletRequest request) {
+    public void removeFriend(@PathVariable Integer id,
+                             @PathVariable Integer friendId,
+                             HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return userService.removeFriend(id, friendId);
+        userService.removeFriend(id, friendId);
     }
 }
