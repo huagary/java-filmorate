@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotExistException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,14 +13,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
-
-    @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public User getUser(int id) {
         return userStorage.getUser(id);
@@ -39,10 +33,14 @@ public class UserService {
         return userStorage.putUser(user);
     }
 
-    public void addFriend(int userId, int friendId) {
+    public boolean addFriend(int userId, int friendId) {
         if (userStorage.getUser(userId) == null) throw new NotExistException("User id not found");
         if (userStorage.getUser(friendId) == null) throw new NotExistException("Friend id not found");
-        userStorage.addFriend(userId, friendId);
+        if (userStorage.getUser(userId).getFriends().add(friendId)) {
+            userStorage.getUser(friendId).getFriends().add(userId);
+            return true;
+        }
+        return false;
     }
 
     public List<User> getFriends(int id) {
@@ -52,10 +50,14 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void removeFriend(int userId, int friendId) {
+    public boolean removeFriend(int userId, int friendId) {
         if (userStorage.getUser(userId) == null) throw new NotExistException("User id not found");
         if (userStorage.getUser(friendId) == null) throw new NotExistException("Friend id not found");
-        userStorage.removeFriend(userId, friendId);
+        if (userStorage.getUser(userId).getFriends().remove(friendId)) {
+            userStorage.getUser(friendId).getFriends().remove(userId);
+            return true;
+        }
+        return false;
     }
 
     public List<User> commonFriends(int userId, int otherId) {

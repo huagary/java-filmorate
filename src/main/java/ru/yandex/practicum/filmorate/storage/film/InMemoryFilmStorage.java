@@ -11,10 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component("inMemoryFilmStorage")
+@Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private final GeneratorID generatorID = new GeneratorID();
+
+
 
     @Override
     public Film getFilm(int id) {
@@ -41,15 +43,5 @@ public class InMemoryFilmStorage implements FilmStorage {
         Validator.validateFilm(film);
         films.put(film.getId(), film);
         return films.get(film.getId());
-    }
-
-    @Override
-    public void addLike(int filmId, int userId) {
-        films.get(filmId).getLikes().add(userId);
-    }
-
-    @Override
-    public void removeLike(int filmId, int userId) {
-        films.get(filmId).getLikes().remove(userId);
     }
 }
