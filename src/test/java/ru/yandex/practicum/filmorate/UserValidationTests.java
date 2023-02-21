@@ -1,12 +1,10 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.util.GeneratorID;
-
 import ru.yandex.practicum.filmorate.util.Validator;
 
 import java.time.LocalDate;
@@ -21,13 +19,14 @@ public class UserValidationTests {
 
     @BeforeEach
     void beforeEach() {
-        user = new User();
         generatorID = new GeneratorID();
-        user.setId(generatorID.generateId());
-        user.setEmail("mail@mail.ru");
-        user.setLogin("dolore");
-        user.setName("Nick Name");
-        user.setBirthday(LocalDate.of(2000, 1, 1));
+        user = User.builder()
+                .id(generatorID.generateId())
+                .email("mail@mail.ru")
+                .login("dolore")
+                .name("Nick Name")
+                .birthday(LocalDate.of(2000, 1, 1))
+                .build();
     }
 
     @Test

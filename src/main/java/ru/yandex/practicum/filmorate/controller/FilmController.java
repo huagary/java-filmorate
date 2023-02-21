@@ -8,16 +8,13 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService filmService;
-    private final Map<Integer, Film> films = new HashMap<>();
     private final String gotReq = "Получен запрос к эндпоинту: '{} {}'";
     private final String likeEndpoint = "/{id}/like/{userId}";
 
@@ -62,18 +59,18 @@ public class FilmController {
     }
 
     @PutMapping(likeEndpoint)
-    public boolean addLike(@PathVariable Integer id,
-                           @PathVariable Integer userId,
-                           HttpServletRequest request) {
+    public void addLike(@PathVariable Integer id,
+                        @PathVariable Integer userId,
+                        HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return filmService.addLike(id, userId);
+        filmService.addLike(id, userId);
     }
 
     @DeleteMapping(likeEndpoint)
-    public boolean removeLike(@PathVariable Integer id,
-                              @PathVariable Integer userId,
-                              HttpServletRequest request) {
+    public void removeLike(@PathVariable Integer id,
+                           @PathVariable Integer userId,
+                           HttpServletRequest request) {
         log.info(gotReq, request.getMethod(), request.getRequestURI());
-        return filmService.removeLike(id, userId);
+        filmService.removeLike(id, userId);
     }
 }
